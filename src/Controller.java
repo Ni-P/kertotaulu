@@ -1,15 +1,14 @@
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -39,28 +38,37 @@ public class Controller {
         assert KysymysLabel != null : "fx:id=\"KysymysLabel\" was not injected: check your FXML file 'gui.fxml'.";
         assert VastausButton != null : "fx:id=\"VastausButton\" was not injected: check your FXML file 'gui.fxml'.";
         assert TopPane != null : "fx:id=\"TopPane\" was not injected: check your FXML file 'gui.fxml'.";
-
     }
 
-    private int _suurinLuku = 11;
-    private ArrayList<Kysymys> _kysymykset;
-    private Kysymys _kysymys;
+    private int suurinLuku = 11;
+    private ArrayList<Kysymys> kysymykset;
+    private Kysymys kysymys;
     Timer delay;
 
     public Controller(Stage primaryStage) {
 
-
+        initialize();
     }
 
     public void init() {
-        VastausButton.setOnMouseClicked(this::Tarkista);
+        VastausButton.setOnMouseClicked(this::tarkistaVastaus);
+        TopPane.setOnKeyPressed(this::keyPressHandler);
     }
 
-    void Tarkista(MouseEvent event) {
-        if (_kysymys == null) {
-            Alusta();
-            UusiKysymys();
-            VastausButton.setText("Tarkista");
+    void keyPressHandler(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            tarkistaVastaus(null);
+        }
+        else if(event.getCode() == KeyCode.ESCAPE) {
+            System.exit(0);
+        }
+    }
+
+    void tarkistaVastaus(MouseEvent event) {
+        if (kysymys == null) {
+            alusta();
+            uusiKysymys();
+            VastausButton.setText("tarkistaVastaus");
             PalauteLabel.setText("");
         }
         else {
@@ -74,22 +82,16 @@ public class Controller {
                 VastausTextField.requestFocus();
                 return;
             }
-            if (_kysymys.get_result() == vastaus) {
+            if (kysymys.getOikeaVastaus() == vastaus) {
                 PalauteLabel.setText("Oikein!");
                 delay = new Timer();
                 delay.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Platform.runLater(()-> UusiKysymys());
+                        Platform.runLater(()-> uusiKysymys());
 
                     }
                 },1000);
-                //                try {
-//                    Thread.currentThread().join();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
             }
             else {
                 PalauteLabel.setText("Väärin, yritä uudestaan.");
@@ -99,26 +101,26 @@ public class Controller {
         }
     }
 
-    private void Alusta(){
-        _kysymykset = new ArrayList<>(_suurinLuku*10);
-        for (int i = 1; i < _suurinLuku; i++) {
+    private void alusta(){
+        kysymykset = new ArrayList<>(suurinLuku *10);
+        for (int i = 1; i < suurinLuku; i++) {
             for (int k = 1; k < 11; k++) {
-                _kysymykset.add(new Kysymys(i,k));
+                kysymykset.add(new Kysymys(i,k));
             }
         }
     }
 
-    private void UusiKysymys() {
-        if (_kysymykset.size() > 0) {
+    private void uusiKysymys() {
+        if (kysymykset.size() > 0) {
             Random rng = new Random();
-            _kysymys = _kysymykset.remove(rng.nextInt(_kysymykset.size()));
-            KysymysLabel.setText(_kysymys.get_kysymys());
+            kysymys = kysymykset.remove(rng.nextInt(kysymykset.size()));
+            KysymysLabel.setText(kysymys.getKysymys());
             VastausTextField.setText("");
             PalauteLabel.setText("");
             VastausTextField.requestFocus();
         }
         else {
-            _kysymys = null;
+            kysymys = null;
             KysymysLabel.setText("Kaikki vastattu!");
             PalauteLabel.setText("Aloitetaanko alusta?");
             VastausButton.setText("Aloita");

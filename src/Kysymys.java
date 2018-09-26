@@ -1,25 +1,28 @@
 public class Kysymys {
 
-    private int _kertoja;
-    private int _kerrottava;
+    private int kertoja;
+    private int kerrottava;
 
-    private int _result;
+    private int oikeaVastaus;
+    private String kysymys;
 
-    public int get_result() {
-        return _result;
+    public Kysymys() {
+        this(1, 1);
     }
-
-    public String get_kysymys() {
-        return _kysymys;
-    }
-
-    private String _kysymys;
 
     public Kysymys(int kertoja, int kerrottava) {
-        _kertoja = kertoja;
-        _kerrottava = kerrottava;
-        _result = _kertoja * _kerrottava;
-        _kysymys = "Paljonko on " + _kertoja + " kertaa " + _kerrottava + "?";
+        this.kertoja = kertoja;
+        this.kerrottava = kerrottava;
+        oikeaVastaus = this.kertoja * this.kerrottava;
+        kysymys = "Paljonko on " + this.kertoja + " kertaa " + this.kerrottava + "?";
+    }
+
+    public int getOikeaVastaus() {
+        return oikeaVastaus;
+    }
+
+    public String getKysymys() {
+        return kysymys;
     }
 
 }
