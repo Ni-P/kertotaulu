@@ -33,7 +33,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        assert PalauteLabel != null : "fx:id=\"PalauteLabel\" was not injected: check your FXML file 'gui.fxml'.";
+        assert PalauteLabel == null : "fx:id=\"PalauteLabel\" was not injected: check your FXML file 'gui.fxml'.";
         assert VastausTextField != null : "fx:id=\"VastausTextField\" was not injected: check your FXML file 'gui.fxml'.";
         assert KysymysLabel != null : "fx:id=\"KysymysLabel\" was not injected: check your FXML file 'gui.fxml'.";
         assert VastausButton != null : "fx:id=\"VastausButton\" was not injected: check your FXML file 'gui.fxml'.";
@@ -50,7 +50,7 @@ public class Controller {
         initialize();
     }
 
-    public void init() {
+    public void bindEvents() {
         VastausButton.setOnMouseClicked(this::tarkistaVastaus);
         TopPane.setOnKeyPressed(this::keyPressHandler);
     }
@@ -66,9 +66,9 @@ public class Controller {
 
     void tarkistaVastaus(MouseEvent event) {
         if (kysymys == null) {
-            alusta();
+            aloitaAlusta();
             uusiKysymys();
-            VastausButton.setText("tarkistaVastaus");
+            VastausButton.setText("Tarkista");
             PalauteLabel.setText("");
         }
         else {
@@ -101,7 +101,7 @@ public class Controller {
         }
     }
 
-    private void alusta(){
+    private void aloitaAlusta(){
         kysymykset = new ArrayList<>(suurinLuku *10);
         for (int i = 1; i < suurinLuku; i++) {
             for (int k = 1; k < 11; k++) {
@@ -120,10 +120,11 @@ public class Controller {
             VastausTextField.requestFocus();
         }
         else {
-            kysymys = null;
-            KysymysLabel.setText("Kaikki vastattu!");
-            PalauteLabel.setText("Aloitetaanko alusta?");
-            VastausButton.setText("Aloita");
+//            kysymys = null;
+//            KysymysLabel.setText("Kaikki vastattu!");
+//            PalauteLabel.setText("Aloitetaanko alusta?");
+//            VastausButton.setText("Aloita");
+            aloitaAlusta();
         }
 //        if (delay != null) {
 //            delay.purge();

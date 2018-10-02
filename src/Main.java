@@ -18,8 +18,9 @@ public class Main extends Application {
 //        root = FXMLLoader.load(getClass().getResource("gui.fxml"));
         loader.setController(controller);
         root = loader.load();
-        controller.init();
+        controller.bindEvents();
         primaryStage.setTitle("Kertotaulu");
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 450, 80));
         primaryStage.show();
         primaryStage.setOnCloseRequest((event)-> System.exit(0));
