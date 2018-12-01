@@ -1,3 +1,5 @@
+package kertotaulu;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,11 +67,13 @@ public class Controller {
     }
 
     void tarkistaVastaus(MouseEvent event) {
+        VastausButton.setDisable(true);
         if (kysymys == null) {
             aloitaAlusta();
             uusiKysymys();
             VastausButton.setText("Tarkista");
             PalauteLabel.setText("");
+            VastausButton.setDisable(false);
         }
         else {
             int vastaus;
@@ -80,6 +84,7 @@ public class Controller {
                 PalauteLabel.setText("Anna kokonnaisluku.");
                 VastausTextField.setText("");
                 VastausTextField.requestFocus();
+                VastausButton.setDisable(false);
                 return;
             }
             if (kysymys.getOikeaVastaus() == vastaus) {
@@ -89,7 +94,7 @@ public class Controller {
                     @Override
                     public void run() {
                         Platform.runLater(()-> uusiKysymys());
-
+                        VastausButton.setDisable(false);
                     }
                 },1000);
             }
@@ -97,8 +102,10 @@ public class Controller {
                 PalauteLabel.setText("Väärin, yritä uudestaan.");
                 VastausTextField.setText("");
                 VastausTextField.requestFocus();
+                VastausButton.setDisable(false);
             }
         }
+
     }
 
     private void aloitaAlusta(){

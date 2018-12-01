@@ -1,3 +1,5 @@
+package kertotaulu;
+
 public class Kysymys {
 
     private int kertoja;
